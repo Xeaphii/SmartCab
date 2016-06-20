@@ -2,6 +2,7 @@ import random
 from environment import Agent, Environment
 from planner import RoutePlanner
 from simulator import Simulator
+from QLearn import QLearn
 
 class LearningAgent(Agent):
     """An agent that learns to drive in the smartcab world."""
@@ -11,7 +12,14 @@ class LearningAgent(Agent):
         self.color = 'red'  # override color
         self.planner = RoutePlanner(self.env, self)  # simple route planner to get next_waypoint
         # TODO: Initialize any additional variables here
-
+        self.learning_rate = 0.5
+        self.discounting_factor = 0.5
+        self.default_val = 2
+        self.QLearner = QLearn(l_actions=Environment.valid_actions,l_learning_rate =self.learning_rate,l_discounting_factor =self.discounting_factor,l_default_val = self.default_val)
+        self.l_initial_state = None
+        self.l_initial_action = None
+        self.l_initial_reward = None
+		
     def reset(self, destination=None):
         self.planner.route_to(destination)
         # TODO: Prepare for a new trip; reset any variables here, if required
@@ -27,16 +35,16 @@ class LearningAgent(Agent):
         # TODO: Update state
         self.state=	 (inputs['light'],inputs['oncoming'] )
         # TODO: Select action according to your policy
-		
-        probable_actions = Environment.valid_actions	
-        random_action = random.randint(0,len(probable_actions)-1)
-        action = probable_actions[random_action]
-        action = self.next_waypoint
+        action =self.QLearner.Get_action(self.state)
+       
         # Execute action and get reward
         reward = self.env.act(self, action)
 
         # TODO: Learn policy based on state, action, reward
-
+        self.QLearner.update_Q(self.l_initial_state,self.l_initial_action,self.l_initial_reward,self.state)
+        self.l_initial_state = self.state
+        self.l_initial_action = action
+        self.l_initial_reward = reward
         print "LearningAgent.update(): deadline = {}, inputs = {}, action = {}, reward = {}".format(deadline, inputs, action, reward)  # [debug]
 
 def run():
