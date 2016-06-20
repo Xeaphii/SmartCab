@@ -33,8 +33,11 @@ class LearningAgent(Agent):
 
         print (inputs['light'],int(inputs['oncoming'] == 'right'),int(inputs['oncoming'] == 'left'))
         # TODO: Update state
-        self.state=	 (inputs['light'],inputs['oncoming'] )
+        self.state=	 (inputs['light'],self.next_waypoint )
         # TODO: Select action according to your policy
+        print 'self.state'
+        print self.state
+		
         action =self.QLearner.Get_action(self.state)
        
         # Execute action and get reward

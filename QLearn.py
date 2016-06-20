@@ -25,7 +25,7 @@ class QLearn:
                         new_action.append( action)
                   elif l_max == self.get_Q_value(l_new_state,action):
                         new_action.append( action)
-            action = 	new_action[random.randint(0, len(new_action))]	  
+            action = 	new_action[random.randint(0, len(new_action)-1)]	  
             self.states[(l_state,l_action)] = (1-self.learning_rate)*self.get_Q_value(l_state,l_action) +self.learning_rate*(l_reward+self.discounting_factor *l_max)  
 	  
    def Get_action(self,l_state):
@@ -41,5 +41,5 @@ class QLearn:
                         new_action.append( action)
             else:
 			      new_action = self.actions
-      action = 	new_action[random.randint(0, len(new_action))]	  
+      action = 	new_action[random.randint(0, len(new_action)-1)]	  
       return action
