@@ -23,9 +23,9 @@ class LearningAgent(Agent):
         inputs = self.env.sense(self)
         deadline = self.env.get_deadline(self)
 
-        print (inputs['light'],self.next_waypoint)
+        print (inputs['light'],int(inputs['oncoming'] == 'right'),int(inputs['oncoming'] == 'left'))
         # TODO: Update state
-        self.state=	 (inputs['light'],self.next_waypoint)
+        self.state=	 (inputs['light'],inputs['oncoming'] )
         # TODO: Select action according to your policy
 		
         probable_actions = Environment.valid_actions	
@@ -45,11 +45,11 @@ def run():
     # Set up environment and agent
     e = Environment()  # create environment (also adds some dummy traffic)
     a = e.create_agent(LearningAgent)  # create agent
-    e.set_primary_agent(a, enforce_deadline=False)  # specify agent to track
+    e.set_primary_agent(a, enforce_deadline=True)  # specify agent to track
     # NOTE: You can set enforce_deadline=False while debugging to allow longer trials
 
     # Now simulate it
-    sim = Simulator(e, update_delay=0.5, display=True)  # create simulator (uses pygame when display=True, if available)
+    sim = Simulator(e, update_delay=0.5, display=False)  # create simulator (uses pygame when display=True, if available)
     # NOTE: To speed up simulation, reduce update_delay and/or set display=False
 
     sim.run(n_trials=10)  # run for a specified number of trials
