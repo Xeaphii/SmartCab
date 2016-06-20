@@ -13,18 +13,27 @@ class LearningAgent(Agent):
         self.planner = RoutePlanner(self.env, self)  # simple route planner to get next_waypoint
         # TODO: Initialize any additional variables here
         self.learning_rate = 0.5
-        self.discounting_factor = 0.5
-        self.default_val = 2
+        self.discounting_factor = 0.1
+        self.default_val = 0
         self.QLearner = QLearn(l_actions=Environment.valid_actions,l_learning_rate =self.learning_rate,l_discounting_factor =self.discounting_factor,l_default_val = self.default_val)
         self.l_initial_state = None
         self.l_initial_action = None
         self.l_initial_reward = None
+        self.x_trials = range(0,100)
+        self.y_trials = range(0,100)
+        self.trials = -1
+
 		
     def reset(self, destination=None):
         self.planner.route_to(destination)
         # TODO: Prepare for a new trip; reset any variables here, if required
         print destination
-
+        self.l_initial_state = None
+        self.l_initial_action = None
+        self.l_initial_reward = None		
+        self.trials = self.trials + 1
+        #print self.QLearner.states
+		
     def update(self, t):
         # Gather inputs
         self.next_waypoint = self.planner.next_waypoint()  # from route planner, also displayed by simulator
@@ -48,6 +57,10 @@ class LearningAgent(Agent):
         self.l_initial_state = self.state
         self.l_initial_action = action
         self.l_initial_reward = reward
+        if (deadline == 0) & (reward < 10):
+            self.y_trials[self.trials] = 0
+        else:
+            self.y_trials[self.trials] = 1		
         print "LearningAgent.update(): deadline = {}, inputs = {}, action = {}, reward = {}".format(deadline, inputs, action, reward)  # [debug]
 
 def run():
@@ -60,12 +73,19 @@ def run():
     # NOTE: You can set enforce_deadline=False while debugging to allow longer trials
 
     # Now simulate it
-    sim = Simulator(e, update_delay=0.5, display=False)  # create simulator (uses pygame when display=True, if available)
+    sim = Simulator(e, update_delay=0, display=False)  # create simulator (uses pygame when display=True, if available)
     # NOTE: To speed up simulation, reduce update_delay and/or set display=False
 
-    sim.run(n_trials=10)  # run for a specified number of trials
+    sim.run(n_trials=100)  # run for a specified number of trials
     # NOTE: To quit midway, press Esc or close pygame window, or hit Ctrl+C on the command-line
-
+    import pylab as pl
+    pl.figure()
+    pl.scatter(a.x_trials,a.y_trials)
+    pl.legend()
+    pl.xlabel('Trial #')
+    pl.ylabel('Success = 1, Failure = 0')
+    pl.title("Training progress report")
+    pl.show()
 
 if __name__ == '__main__':
     run()

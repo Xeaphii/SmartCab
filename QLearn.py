@@ -39,7 +39,7 @@ class QLearn:
                         new_action.append( action)
                   elif l_max == self.get_Q_value(l_state,action):
                         new_action.append( action)
-            else:
-			      new_action = self.actions
+      else:
+            new_action = self.actions
       action = 	new_action[random.randint(0, len(new_action)-1)]	  
       return action
