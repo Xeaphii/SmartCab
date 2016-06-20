@@ -23,15 +23,15 @@ class LearningAgent(Agent):
         inputs = self.env.sense(self)
         deadline = self.env.get_deadline(self)
 
-        print (inputs['light'],self.next_waypoint)
+        print self.next_waypoint
         # TODO: Update state
-        self.state=	 (inputs['light'],self.next_waypoint)
+        
         # TODO: Select action according to your policy
 		
         probable_actions = Environment.valid_actions	
         random_action = random.randint(0,len(probable_actions)-1)
         action = probable_actions[random_action]
-        action = self.next_waypoint
+
         # Execute action and get reward
         reward = self.env.act(self, action)
 
