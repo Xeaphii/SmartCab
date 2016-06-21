@@ -27,6 +27,7 @@ class LearningAgent(Agent):
         # TODO: Update state
         
         # TODO: Select action according to your policy
+        self.state=	 (inputs['light'],self.next_waypoint )
 		
         probable_actions = Environment.valid_actions	
         random_action = random.randint(0,len(probable_actions)-1)
@@ -52,7 +53,7 @@ def run():
     sim = Simulator(e, update_delay=0.5, display=True)  # create simulator (uses pygame when display=True, if available)
     # NOTE: To speed up simulation, reduce update_delay and/or set display=False
 
-    sim.run(n_trials=10)  # run for a specified number of trials
+    sim.run(n_trials=100)  # run for a specified number of trials
     # NOTE: To quit midway, press Esc or close pygame window, or hit Ctrl+C on the command-line
 
 
