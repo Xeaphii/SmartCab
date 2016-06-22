@@ -25,7 +25,7 @@ class LearningAgent(Agent):
 
         print self.next_waypoint
         # TODO: Update state
-        
+        self.state=	 (('light',inputs['light']),('next_waypoint',self.next_waypoint ))         
         # TODO: Select action according to your policy
 		
         probable_actions = []
